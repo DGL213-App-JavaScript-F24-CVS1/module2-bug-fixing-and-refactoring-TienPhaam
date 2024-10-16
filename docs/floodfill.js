@@ -1,7 +1,7 @@
 "use strict";
 
 (() => {
-window.addEventListener("load", (event) => {
+window.addEventListener("load",() => {
 // *****************************************************************************
 // #region Constants and Variables
 
@@ -62,11 +62,13 @@ function initializeHistory(startingGrid) {
 }   
 
 function rollBackHistory() {
-    if (grids.length > 0) {
-        grids = grids.slice(0, grids.length-1);
-        render(grids[grids.length-1]);
+    if (grids.length > 1) {
+        grids.pop(); // Remove the last grid state
+        render(grids[grids.length - 1]);
     }
 }
+
+
 
 function transposeGrid() {
     for (let i = 0; i < grids.length; i++) {
@@ -87,7 +89,7 @@ function transposeGrid() {
 
 function render(grid) {
     for (let i = 0; i < grid.length; i++) {
-        ctx.fillStyle = `rgb(${grid[i][0]}, ${grid[i][0]}, ${grid[i][2]})`;
+        ctx.fillStyle = `rgb(${grid[i][0]}, ${grid[i][1]}, ${grid[i][2]})`;
         ctx.fillRect((i % CELLS_PER_AXIS) * CELL_WIDTH, Math.floor(i / CELLS_PER_AXIS) * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
     }
     playerScoreText.textContent = playerScore;
@@ -119,7 +121,8 @@ function floodFill(grid, gridCoordinate, colorToChange) {
 }
 
 function restart() {
-    startGame(grids[0]);
+    playerScore = MAXIMUM_SCORE; // Reset player score to maximum
+    startGame(); // Start a new game with a new grid
 }
 
 // #endregion
